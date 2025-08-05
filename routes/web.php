@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\AddSubject;
+use App\Livewire\EditSubject;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -16,7 +17,8 @@ Route::view('dashboard', 'dashboard')
 
 // students
 Route::middleware(['auth'])->group(function () {
-    Route::get('/create/subject', AddSubject::class)->name('subject.add');
+    Route::get('/create/subject', AddSubject::class)->name('add.subject');
+    Route::get('/edit/subject/{subject}', EditSubject::class)->name('edit.subject');
 });
 
 Route::middleware(['auth'])->group(function () {
