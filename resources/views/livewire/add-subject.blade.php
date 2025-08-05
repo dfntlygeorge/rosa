@@ -1,234 +1,154 @@
- <div class="max-w-2xl mx-auto">
-     <div class="bg-gray-800 rounded-lg shadow-xl p-6">
-         <h2 class="text-2xl font-bold text-white mb-6">Add New Subject</h2>
+<div class="max-w-2xl mx-auto">
+    <div class="bg-gray-800 rounded-lg shadow-xl p-6">
+        <h2 class="text-2xl font-bold text-white mb-6">Add New Subject</h2>
 
-         <form class="space-y-6">
-             <!-- Subject Name -->
-             <div>
-                 <label for="subject_name" class="block text-sm font-medium text-gray-300 mb-2">
-                     Subject Name
-                 </label>
-                 <input type="text" id="subject_name"
-                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 transition-colors"
-                     placeholder="Enter subject name">
-             </div>
+        <form wire:submit="createSubject" class="space-y-6">
+            <!-- Subject Name -->
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-300 mb-2">
+                    Subject Name
+                </label>
+                <input type="text" id="name" wire:model="name"
+                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 transition-colors @error('name') border-red-500 @enderror"
+                    placeholder="Enter subject name">
+                @error('name')
+                    <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
 
-             <!-- Professor -->
-             <div>
-                 <label for="professor" class="block text-sm font-medium text-gray-300 mb-2">
-                     Professor
-                 </label>
-                 <input type="text" id="professor"
-                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 transition-colors"
-                     placeholder="Enter professor name">
-             </div>
+            <!-- Professor -->
+            <div>
+                <label for="professor" class="block text-sm font-medium text-gray-300 mb-2">
+                    Professor
+                </label>
+                <input type="text" id="professor" wire:model="professor"
+                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 transition-colors"
+                    placeholder="Enter professor name">
+            </div>
 
-             <!-- Units -->
-             <div>
-                 <label for="units" class="block text-sm font-medium text-gray-300 mb-2">
-                     Units
-                 </label>
-                 <input type="number" id="units" min="1" max="10"
-                     class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 transition-colors"
-                     placeholder="Enter unit count">
-             </div>
+            <!-- Units -->
+            <div>
+                <label for="unit_count" class="block text-sm font-medium text-gray-300 mb-2">
+                    Units
+                </label>
+                <input type="number" id="unit_count" wire:model="unit_count" min="1" max="10"
+                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 transition-colors @error('unit_count') border-red-500 @enderror"
+                    placeholder="Enter unit count">
+                @error('unit_count')
+                    <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
 
-             <!-- Subject Color -->
-             <div>
-                 <label class="block text-sm font-medium text-gray-300 mb-2">
-                     Subject Color
-                 </label>
-                 <div class="relative">
-                     <button type="button" id="colorDropdown"
-                         class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white text-left flex items-center justify-between transition-colors"
-                         onclick="toggleColorDropdown()">
-                         <div class="flex items-center">
-                             <div class="w-6 h-6 rounded-full bg-blue-500 mr-3" id="selectedColor"></div>
-                             <span id="selectedColorText">Blue</span>
-                         </div>
-                         <svg class="w-5 h-5 text-gray-400 transition-transform" id="dropdownIcon" fill="none"
-                             stroke="currentColor" viewBox="0 0 24 24">
-                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                             </path>
-                         </svg>
-                     </button>
+            <!-- Subject Color -->
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">
+                    Subject Color
+                </label>
+                <div class="relative" x-data="{ open: false }">
+                    <button type="button" @click="open = !open"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white text-left flex items-center justify-between transition-colors">
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 rounded-full bg-{{ $color }}-500 mr-3"></div>
+                            <span class="capitalize">{{ $color }}</span>
+                        </div>
+                        <svg class="w-5 h-5 text-gray-400 transition-transform" :class="{ 'rotate-180': open }"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
 
-                     <div id="colorOptions"
-                         class="absolute top-full left-0 right-0 mt-1 bg-gray-700 border border-gray-600 rounded-lg shadow-lg z-10 hidden">
-                         <div class="p-3 grid grid-cols-4 gap-3">
-                             <button type="button"
-                                 class="color-option flex flex-col items-center p-2 rounded-lg hover:bg-gray-600 transition-colors"
-                                 data-color="blue" data-name="Blue">
-                                 <div class="w-8 h-8 rounded-full bg-blue-500 mb-1"></div>
-                                 <span class="text-xs text-gray-300">Blue</span>
-                             </button>
-                             <button type="button"
-                                 class="color-option flex flex-col items-center p-2 rounded-lg hover:bg-gray-600 transition-colors"
-                                 data-color="red" data-name="Red">
-                                 <div class="w-8 h-8 rounded-full bg-red-500 mb-1"></div>
-                                 <span class="text-xs text-gray-300">Red</span>
-                             </button>
-                             <button type="button"
-                                 class="color-option flex flex-col items-center p-2 rounded-lg hover:bg-gray-600 transition-colors"
-                                 data-color="green" data-name="Green">
-                                 <div class="w-8 h-8 rounded-full bg-green-500 mb-1"></div>
-                                 <span class="text-xs text-gray-300">Green</span>
-                             </button>
-                             <button type="button"
-                                 class="color-option flex flex-col items-center p-2 rounded-lg hover:bg-gray-600 transition-colors"
-                                 data-color="yellow" data-name="Yellow">
-                                 <div class="w-8 h-8 rounded-full bg-yellow-500 mb-1"></div>
-                                 <span class="text-xs text-gray-300">Yellow</span>
-                             </button>
-                             <button type="button"
-                                 class="color-option flex flex-col items-center p-2 rounded-lg hover:bg-gray-600 transition-colors"
-                                 data-color="purple" data-name="Purple">
-                                 <div class="w-8 h-8 rounded-full bg-purple-500 mb-1"></div>
-                                 <span class="text-xs text-gray-300">Purple</span>
-                             </button>
-                             <button type="button"
-                                 class="color-option flex flex-col items-center p-2 rounded-lg hover:bg-gray-600 transition-colors"
-                                 data-color="pink" data-name="Pink">
-                                 <div class="w-8 h-8 rounded-full bg-pink-500 mb-1"></div>
-                                 <span class="text-xs text-gray-300">Pink</span>
-                             </button>
-                             <button type="button"
-                                 class="color-option flex flex-col items-center p-2 rounded-lg hover:bg-gray-600 transition-colors"
-                                 data-color="indigo" data-name="Indigo">
-                                 <div class="w-8 h-8 rounded-full bg-indigo-500 mb-1"></div>
-                                 <span class="text-xs text-gray-300">Indigo</span>
-                             </button>
-                             <button type="button"
-                                 class="color-option flex flex-col items-center p-2 rounded-lg hover:bg-gray-600 transition-colors"
-                                 data-color="teal" data-name="Teal">
-                                 <div class="w-8 h-8 rounded-full bg-teal-500 mb-1"></div>
-                                 <span class="text-xs text-gray-300">Teal</span>
-                             </button>
-                         </div>
-                     </div>
-                 </div>
-             </div>
+                    <div x-show="open" @click.away="open = false" x-transition
+                        class="absolute top-full left-0 right-0 mt-1 bg-gray-700 border border-gray-600 rounded-lg shadow-lg z-10">
+                        <div class="p-3 grid grid-cols-4 gap-3">
+                            @foreach (['blue', 'red', 'green', 'yellow', 'purple', 'pink', 'indigo', 'teal'] as $colorOption)
+                                <button type="button" wire:click="$set('color', '{{ $colorOption }}')"
+                                    @click="open = false"
+                                    class="flex flex-col items-center p-2 rounded-lg hover:bg-gray-600 transition-colors {{ $color === $colorOption ? 'bg-gray-600' : '' }}">
+                                    <div class="w-8 h-8 rounded-full bg-{{ $colorOption }}-500 mb-1"></div>
+                                    <span class="text-xs text-gray-300 capitalize">{{ $colorOption }}</span>
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-             <!-- Schedule -->
-             <div>
-                 <label class="block text-sm font-medium text-gray-300 mb-2">
-                     Schedule
-                 </label>
+            <!-- Schedule -->
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">
+                    Schedule
+                </label>
 
-                 <!-- Time Range -->
-                 <div class="mb-4">
-                     <label class="block text-xs font-medium text-gray-400 mb-2">Time</label>
-                     <div class="flex items-center space-x-3">
-                         <input type="time" id="start_time"
-                             class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white transition-colors">
-                         <span class="text-gray-400">to</span>
-                         <input type="time" id="end_time"
-                             class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white transition-colors">
-                     </div>
-                 </div>
+                <!-- Time Range -->
+                <div class="mb-4">
+                    <label class="block text-xs font-medium text-gray-400 mb-2">Time</label>
+                    <div class="flex items-center space-x-3">
+                        <input type="time" id="start_time" wire:model="start_time"
+                            class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white transition-colors @error('start_time') border-red-500 @enderror">
+                        <span class="text-gray-400">to</span>
+                        <input type="time" id="end_time" wire:model="end_time"
+                            class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white transition-colors @error('end_time') border-red-500 @enderror">
+                    </div>
+                    @error('start_time')
+                        <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                    @enderror
+                    @error('end_time')
+                        <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                 <!-- Days Selection -->
-                 <div>
-                     <label class="block text-xs font-medium text-gray-400 mb-2">Days</label>
-                     <div class="flex flex-wrap gap-2">
-                         <button type="button"
-                             class="day-btn px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-300 hover:bg-gray-600 transition-colors"
-                             data-day="M">
-                             Monday
-                         </button>
-                         <button type="button"
-                             class="day-btn px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-300 hover:bg-gray-600 transition-colors"
-                             data-day="T">
-                             Tuesday
-                         </button>
-                         <button type="button"
-                             class="day-btn px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-300 hover:bg-gray-600 transition-colors"
-                             data-day="W">
-                             Wednesday
-                         </button>
-                         <button type="button"
-                             class="day-btn px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-300 hover:bg-gray-600 transition-colors"
-                             data-day="Th">
-                             Thursday
-                         </button>
-                         <button type="button"
-                             class="day-btn px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-300 hover:bg-gray-600 transition-colors"
-                             data-day="F">
-                             Friday
-                         </button>
-                         <button type="button"
-                             class="day-btn px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-300 hover:bg-gray-600 transition-colors"
-                             data-day="S">
-                             Saturday
-                         </button>
-                         <button type="button"
-                             class="day-btn px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-300 hover:bg-gray-600 transition-colors"
-                             data-day="Su">
-                             Sunday
-                         </button>
-                     </div>
-                 </div>
-             </div>
+                <!-- Days Selection -->
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-2">Days</label>
+                    <div class="flex flex-wrap gap-2">
+                        @php
+                            $days = [
+                                'M' => 'Monday',
+                                'T' => 'Tuesday',
+                                'W' => 'Wednesday',
+                                'Th' => 'Thursday',
+                                'F' => 'Friday',
+                                'S' => 'Saturday',
+                                'Su' => 'Sunday',
+                            ];
+                        @endphp
 
-             <!-- Action Buttons -->
-             <div class="flex justify-end space-x-4 pt-6 border-t border-gray-700">
-                 <button type="button"
-                     class="px-6 py-3 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors font-medium">
-                     Cancel
-                 </button>
-                 <button type="submit"
-                     class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
-                     Add Subject
-                 </button>
-             </div>
-         </form>
-     </div>
- </div>
+                        @foreach ($days as $dayCode => $dayName)
+                            <button type="button" wire:click="toggleDay('{{ $dayCode }}')"
+                                class="px-4 py-2 rounded-lg text-sm transition-colors {{ in_array($dayCode, $selected_days) ? 'bg-purple-600 text-white border-purple-600' : 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600' }} border">
+                                {{ $dayName }}
+                            </button>
+                        @endforeach
+                    </div>
+                    @error('selected_days')
+                        <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
 
- <script>
-     // Color dropdown functionality
-     function toggleColorDropdown() {
-         const dropdown = document.getElementById('colorOptions');
-         const icon = document.getElementById('dropdownIcon');
+            <!-- Action Buttons -->
+            <div class="flex justify-end space-x-4 pt-6 border-t border-gray-700">
+                <button type="button" wire:click="$set('name', '')"
+                    class="px-6 py-3 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors font-medium">
+                    Cancel
+                </button>
+                <button type="submit"
+                    class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium disabled:opacity-50"
+                    wire:loading.attr="disabled">
+                    <span wire:loading.remove>Add Subject</span>
+                    <span wire:loading>Adding...</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
-         dropdown.classList.toggle('hidden');
-         icon.classList.toggle('rotate-180');
-     }
-
-     // Color selection
-     document.querySelectorAll('.color-option').forEach(option => {
-         option.addEventListener('click', function() {
-             const color = this.dataset.color;
-             const name = this.dataset.name;
-
-             document.getElementById('selectedColor').className =
-                 `w-6 h-6 rounded-full bg-${color}-500 mr-3`;
-             document.getElementById('selectedColorText').textContent = name;
-
-             toggleColorDropdown();
-         });
-     });
-
-     // Day selection functionality
-     document.querySelectorAll('.day-btn').forEach(btn => {
-         btn.addEventListener('click', function() {
-             this.classList.toggle('bg-purple-600');
-             this.classList.toggle('text-white');
-             this.classList.toggle('border-purple-600');
-             this.classList.toggle('bg-gray-700');
-             this.classList.toggle('text-gray-300');
-             this.classList.toggle('border-gray-600');
-         });
-     });
-
-     // Close dropdown when clicking outside
-     document.addEventListener('click', function(event) {
-         const dropdown = document.getElementById('colorDropdown');
-         const options = document.getElementById('colorOptions');
-
-         if (!dropdown.contains(event.target) && !options.contains(event.target)) {
-             options.classList.add('hidden');
-             document.getElementById('dropdownIcon').classList.remove('rotate-180');
-         }
-     });
- </script>
+@script
+    <script>
+        // Initialize Alpine.js data for dropdown functionality
+        if (typeof Alpine !== 'undefined') {
+            // Alpine is available, dropdown will work with x-data
+        }
+    </script>
+@endscript

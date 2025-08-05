@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('professor')->nullable();
             $table->string('color')->nullable(); // Could store hex (#ff0000) or Tailwind class (bg-red-500)
             $table->unsignedTinyInteger('unit_count')->nullable(); // If you ever calculate GPA weight
-            $table->json('schedule_info')->nullable(); // e.g. { "days": ["M", "W", "F"], "time": "10:00-11:00 AM" }
+            $table->json('schedule_info')->nullable();
             $table->timestamps();
         });
     }

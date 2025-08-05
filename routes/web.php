@@ -15,7 +15,9 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 // students
-Route::get('/create/subject', AddSubject::class);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/create/subject', AddSubject::class)->name('subject.add');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
