@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\AddSubject;
+use App\Livewire\Dashboard\TaskDashboard;
 use App\Livewire\EditSubject;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
@@ -11,9 +12,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+// dashboard
+Route::get('/dashboard', TaskDashboard::class)->name('dashboard');
 
 // students
 Route::middleware(['auth'])->group(function () {
