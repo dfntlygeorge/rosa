@@ -51,7 +51,7 @@ class TaskSeeder extends Seeder
             'subject_id' => $cmsc110->id,
             'title' => 'Create Static HTML Portfolio Site',
             'description' => 'Include at least 3 sections: About, Projects, Contact.',
-            'due_date' => Carbon::now()->addDays(2),
+            'due_date' => Carbon::now(),
             'priority' => 'high',
             'xp_earned' => 30,
         ]);

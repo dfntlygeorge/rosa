@@ -20,6 +20,7 @@ class HeaderSummary extends Component
     public function getGreetingProperty()
     {
         $hour = now()->hour;
+        // dd($hour);
 
         if ($hour < 12) {
             return 'Good morning';

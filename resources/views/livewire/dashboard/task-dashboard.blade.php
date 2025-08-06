@@ -2,7 +2,7 @@
     <div class="max-w-6xl mx-auto px-4 py-4 space-y-4">
 
         <!-- Compact Header Summary -->
-        @include('livewire.dashboard.header-summary')
+        <livewire:dashboard.header-summary :user=$user :tasksRemaining=$tasksRemaining :userLevel=$userLevel />
 
         <!-- Quick Filters/Tabs - More Compact -->
         <div class="bg-gray-800 rounded-lg px-4 py-3">

@@ -5,10 +5,10 @@
         <!-- Welcome Message - More Compact -->
         <div class="flex-1">
             <h1 class="text-xl lg:text-2xl font-bold text-white mb-1">
-                👋 Good evening, George!
+                👋 {{ $this->getGreetingProperty() }}, George!
             </h1>
             <p class="text-purple-100 text-sm">
-                You have 3 tasks remaining today
+                {{ $this->getTasksRemainingMessageProperty() }}
             </p>
         </div>
 
