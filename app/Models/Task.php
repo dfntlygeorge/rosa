@@ -22,6 +22,10 @@ class Task extends Model
         "xp_earned",
     ];
 
+    protected $casts = [
+        'due_date' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -34,10 +34,11 @@
 
             <!-- Subject & XP - Horizontal Layout -->
             <div class="flex items-center justify-between mb-2">
-                <span
-                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-{{ $subjectColor }}-600 text-{{ $subjectColor }}-100">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+                    style="background-color: {{ $subjectColor }}; color: white;">
                     {{ $subject }}
                 </span>
+
                 <span
                     class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-purple-600 text-purple-100">
                     +{{ $xpEarned }}

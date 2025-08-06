@@ -12,7 +12,7 @@
                 </button>
                 <button
                     class="px-3 py-1.5 bg-gray-700 text-gray-300 rounded-md text-xs font-medium hover:bg-gray-600 transition-colors">
-                    Today (3)
+                    Today ({{ $tasksRemaining }})
                 </button>
                 <button
                     class="px-3 py-1.5 bg-gray-700 text-gray-300 rounded-md text-xs font-medium hover:bg-gray-600 transition-colors">
@@ -33,37 +33,23 @@
                 <div class="px-4 py-3 border-b border-gray-700">
                     <h2 class="text-lg font-bold text-white flex items-center">
                         📅 Today's Tasks
-                        <span class="ml-2 text-xs bg-purple-600 text-white px-2 py-1 rounded-full">3</span>
+                        <span
+                            class="ml-2 text-xs bg-purple-600 text-white px-2 py-1 rounded-full">{{ $tasksRemaining }}</span>
                     </h2>
                 </div>
                 <div class="p-3 space-y-3">
-                    <!-- TODO: Loop through today's tasks -->
-                    @include('partials.task-item', [
-                        'title' => 'Complete Database Assignment',
-                        'subject' => 'CMSC 331',
-                        'subjectColor' => 'blue',
-                        'dueTime' => '4h left',
-                        'priority' => 'high',
-                        'xpEarned' => 50,
-                    ])
-
-                    @include('partials.task-item', [
-                        'title' => 'Read Chapter 5: Data Structures',
-                        'subject' => 'CMSC 202',
-                        'subjectColor' => 'green',
-                        'dueTime' => '8h left',
-                        'priority' => 'medium',
-                        'xpEarned' => 25,
-                    ])
-
-                    @include('partials.task-item', [
-                        'title' => 'Submit Lab Report',
-                        'subject' => 'CHEM 131',
-                        'subjectColor' => 'red',
-                        'dueTime' => '11:59 PM',
-                        'priority' => 'low',
-                        'xpEarned' => 30,
-                    ])
+                    @forelse($tasksToday as $task)
+                        @include('partials.task-item', [
+                            'title' => $task->title,
+                            'subject' => $task->subject->name,
+                            'subjectColor' => $task->subject->color ?? 'red',
+                            'dueTime' => $task->due_date->diffForHumans(['parts' => 2, 'short' => true]), // e.g., "in 4h"
+                            'priority' => $task->priority,
+                            'xpEarned' => $task->xp_earned,
+                        ])
+                    @empty
+                        <p class="text-purple-200 text-sm">No tasks due today! 🎉</p>
+                    @endforelse
                 </div>
             </div>
 
@@ -72,80 +58,58 @@
                 <div class="px-4 py-3 border-b border-red-800">
                     <h2 class="text-lg font-bold text-red-400 flex items-center">
                         ⚠️ Overdue
-                        <span class="ml-2 text-xs bg-red-600 text-white px-2 py-1 rounded-full">2</span>
+                        <span class="ml-2 text-xs bg-red-600 text-white px-2 py-1 rounded-full">
+                            {{ $overdueTasksRemaining }}
+                        </span>
                     </h2>
                 </div>
                 <div class="p-3 space-y-3">
-                    <!-- TODO: Loop through overdue tasks -->
-                    @include('partials.task-item', [
-                        'title' => 'History Essay Draft',
-                        'subject' => 'HIST 201',
-                        'subjectColor' => 'yellow',
-                        'dueTime' => '2d ago',
-                        'priority' => 'high',
-                        'xpEarned' => 75,
-                        'isOverdue' => true,
-                    ])
-
-                    @include('partials.task-item', [
-                        'title' => 'Physics Problem Set 3',
-                        'subject' => 'PHYS 161',
-                        'subjectColor' => 'indigo',
-                        'dueTime' => '1d ago',
-                        'priority' => 'medium',
-                        'xpEarned' => 40,
-                        'isOverdue' => true,
-                    ])
+                    @forelse ($overdueTasks as $task)
+                        @include('partials.task-item', [
+                            'title' => $task->title,
+                            'subject' => $task->subject->name,
+                            'subjectColor' => $task->subject->color ?? '#6b7280',
+                            'dueTime' => $task->due_date->diffForHumans(['short' => true]),
+                            'priority' => $task->priority,
+                            'xpEarned' => $task->xp_earned,
+                            'isOverdue' => true,
+                        ])
+                    @empty
+                        <p class="text-sm text-red-300">You're all caught up! 🎉</p>
+                    @endforelse
                 </div>
             </div>
+
 
             <!-- Upcoming Tasks Column -->
             <div class="bg-gray-800 rounded-lg">
                 <div class="px-4 py-3 border-b border-gray-700">
                     <h2 class="text-lg font-bold text-white flex items-center">
                         📆 Upcoming
-                        <span class="ml-2 text-xs bg-blue-600 text-white px-2 py-1 rounded-full">4</span>
+                        <span class="ml-2 text-xs bg-blue-600 text-white px-2 py-1 rounded-full">
+                            {{ $upcomingTasksCount }}
+                        </span>
                     </h2>
                 </div>
                 <div class="p-3 space-y-3 max-h-96 overflow-y-auto">
-                    <!-- TODO: Loop through upcoming tasks -->
-                    @include('partials.task-item', [
-                        'title' => 'Midterm Exam Preparation',
-                        'subject' => 'MATH 141',
-                        'subjectColor' => 'purple',
-                        'dueTime' => 'Tomorrow',
-                        'priority' => 'high',
-                        'xpEarned' => 100,
-                    ])
-
-                    @include('partials.task-item', [
-                        'title' => 'Programming Project',
-                        'subject' => 'CMSC 201',
-                        'subjectColor' => 'teal',
-                        'dueTime' => 'Mar 15',
-                        'priority' => 'medium',
-                        'xpEarned' => 80,
-                    ])
-
-                    @include('partials.task-item', [
-                        'title' => 'Group Presentation',
-                        'subject' => 'BMGT 380',
-                        'subjectColor' => 'pink',
-                        'dueTime' => 'Mar 18',
-                        'priority' => 'medium',
-                        'xpEarned' => 60,
-                    ])
-
-                    @include('partials.task-item', [
-                        'title' => 'Literature Review',
-                        'subject' => 'ENGL 101',
-                        'subjectColor' => 'green',
-                        'dueTime' => 'Mar 20',
-                        'priority' => 'low',
-                        'xpEarned' => 45,
-                    ])
+                    @forelse ($upcomingTasks as $task)
+                        @include('partials.task-item', [
+                            'title' => $task->title,
+                            'subject' => $task->subject->name,
+                            'subjectColor' => $task->subject->color ?? '#6b7280',
+                            'dueTime' => $task->due_date->isTomorrow()
+                                ? 'Tomorrow'
+                                : $task->due_date->format('M j'),
+                            'priority' => $task->priority,
+                            'xpEarned' => $task->xp_earned,
+                            'isOverdue' => false,
+                        ])
+                    @empty
+                        <p class="text-sm text-gray-400">No upcoming tasks. You're ahead of the game! 🧠</p>
+                    @endforelse
                 </div>
             </div>
+
 
         </div>
 
