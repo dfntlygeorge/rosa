@@ -12,7 +12,7 @@
 @endphp
 
 <div
-    class="bg-gray-700 rounded-lg p-3 hover:bg-gray-650 transition-colors {{ $isOverdue ? 'border-l-2 border-red-500' : '' }}">
+    class="bg-gray-700 rounded-lg p-3 hover:bg-gray-650 transition-colors {{ $isOverdue ? 'border-l-2 border-red-500' : '' }} relative group">
     <div class="flex items-start space-x-3">
 
         <!-- Compact Checkbox -->
@@ -61,5 +61,47 @@
                 </span>
             </div>
         </div>
+
+        <!-- Actions Dropdown -->
+        <div x-data="{ open: false }" @mouseleave="open = false"
+            class="relative opacity-0 group-hover:opacity-100 transition-opacity">
+
+            <button @click="open = !open" class="p-1 rounded-md hover:bg-gray-600 transition-colors" type="button">
+                <svg class="w-4 h-4 text-gray-400 hover:text-white transition-colors" fill="currentColor"
+                    viewBox="0 0 20 20">
+                    <path
+                        d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z">
+                    </path>
+                </svg>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div x-show="open" @click.outside="open = false" x-transition
+                class="absolute right-0 top-8 mt-1 w-32 bg-gray-800 rounded-md shadow-lg border border-gray-600 z-50">
+                <div class="py-1">
+                    <button
+                        class="w-full text-left px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors flex items-center space-x-2"
+                        @click="/* replace with Livewire or JS editTask() */">
+                        <svg class="w-3 h-3" ...></svg>
+                        <span>Edit</span>
+                    </button>
+                    <button
+                        class="w-full text-left px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors flex items-center space-x-2"
+                        @click="/* archiveTask() */">
+                        <svg class="w-3 h-3" ...></svg>
+                        <span>Archive</span>
+                    </button>
+                    <button
+                        class="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-red-900 hover:text-red-300 transition-colors flex items-center space-x-2"
+                        @click="/* deleteTask() */">
+                        <svg class="w-3 h-3" ...></svg>
+                        <span>Delete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
+
+<!-- JavaScript for dropdown functionality -->

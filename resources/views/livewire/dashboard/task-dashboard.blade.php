@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gray-900 text-white">
+<div class="min-h-screen bg-gray-900 text-white p-0">
     <div class="max-w-6xl mx-auto px-4 py-4 space-y-4">
 
         <!-- Compact Header Summary -->
