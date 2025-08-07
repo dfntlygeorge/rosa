@@ -13,6 +13,16 @@ class TaskDashboard extends Component
 {
 
     protected $listeners = ['deleteTask' => 'deleteTask'];
+    public function toggleMarkAsDone($taskId)
+    {
+        $task = Task::where('user_id', Auth::id())
+            ->where('id', $taskId)
+            ->firstOrFail();
+
+        $task->is_done = !$task->is_done;
+        $task->save();
+    }
+
 
     public function deleteTask($taskId)
     {
@@ -63,7 +73,6 @@ class TaskDashboard extends Component
             ->where('user_id', $user->id)
             ->where('is_deleted', false)
             ->whereBetween('due_date', [$now, $now->copy()->endOfDay()])
-            ->where('is_done', false)
             ->orderBy('due_date')
             ->get();
 
@@ -75,7 +84,6 @@ class TaskDashboard extends Component
             ->where('due_date', '<', $now)
             ->where('is_deleted', false)
 
-            ->where('is_done', false)
             ->orderBy('due_date')
             ->get();
 
@@ -83,7 +91,6 @@ class TaskDashboard extends Component
         $upcomingTasks = Task::with('subject')
             ->where('user_id', $user->id)
             ->where('due_date', '>=', $tomorrow)
-            ->where('is_done', false)
             ->where('is_deleted', false)
 
             ->orderBy('due_date')

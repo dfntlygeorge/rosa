@@ -29,61 +29,47 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
             <!-- Today's Tasks Column -->
+            {{-- Today's Tasks Section --}}
             <div class="bg-gray-800 rounded-lg">
                 <div class="px-4 py-3 border-b border-gray-700">
                     <h2 class="text-lg font-bold text-white flex items-center">
-                        📅 Today's Tasks
-                        <span
-                            class="ml-2 text-xs bg-purple-600 text-white px-2 py-1 rounded-full">{{ $tasksRemaining }}</span>
+                        🎯 Today's Tasks
+                        <span class="ml-2 text-xs bg-green-600 text-white px-2 py-1 rounded-full">
+                            {{ $tasksRemaining }}
+                        </span>
                     </h2>
                 </div>
-                <div class="p-3 space-y-3">
-                    @forelse($tasksToday as $task)
-                        @include('partials.task-item', [
-                            'title' => $task->title,
-                            'subject' => $task->subject->name,
-                            'subjectColor' => $task->subject->color ?? 'red',
-                            'dueTime' => $task->due_date->diffForHumans(['parts' => 2, 'short' => true]), // e.g., "in 4h"
-                            'priority' => $task->priority,
-                            'xpEarned' => $task->xp_earned,
-                            'taskId' => $task->id,
-                        ])
+                <div class="p-3 space-y-3 max-h-96 overflow-y-auto">
+                    @forelse ($tasksToday as $task)
+                        @livewire('dashboard.task-item', ['task' => $task], key('today-' . $task->id))
                     @empty
-                        <p class="text-purple-200 text-sm">No tasks due today! 🎉</p>
+                        <p class="text-sm text-gray-400">No tasks for today. Time to relax! 🎉</p>
                     @endforelse
                 </div>
             </div>
 
             <!-- Overdue Tasks Column -->
-            <div class="bg-red-900/20 border border-red-800 rounded-lg">
-                <div class="px-4 py-3 border-b border-red-800">
-                    <h2 class="text-lg font-bold text-red-400 flex items-center">
+            <div class="bg-gray-800 rounded-lg">
+                <div class="px-4 py-3 border-b border-gray-700">
+                    <h2 class="text-lg font-bold text-white flex items-center">
                         ⚠️ Overdue
                         <span class="ml-2 text-xs bg-red-600 text-white px-2 py-1 rounded-full">
                             {{ $overdueTasksRemaining }}
                         </span>
                     </h2>
                 </div>
-                <div class="p-3 space-y-3">
+                <div class="p-3 space-y-3 max-h-96 overflow-y-auto">
                     @forelse ($overdueTasks as $task)
-                        @include('partials.task-item', [
-                            'title' => $task->title,
-                            'subject' => $task->subject->name,
-                            'subjectColor' => $task->subject->color ?? '#6b7280',
-                            'dueTime' => $task->due_date->diffForHumans(['short' => true]),
-                            'priority' => $task->priority,
-                            'xpEarned' => $task->xp_earned,
-                            'isOverdue' => true,
-                            'taskId' => $task->id,
-                        ])
+                        @livewire('dashboard.task-item', ['task' => $task], key('overdue-' . $task->id))
                     @empty
-                        <p class="text-sm text-red-300">You're all caught up! 🎉</p>
+                        <p class="text-sm text-gray-400">No overdue tasks. Great job staying on top of things! 👏</p>
                     @endforelse
                 </div>
             </div>
 
 
             <!-- Upcoming Tasks Column -->
+            {{-- Updated section using Livewire TaskItem component --}}
             <div class="bg-gray-800 rounded-lg">
                 <div class="px-4 py-3 border-b border-gray-700">
                     <h2 class="text-lg font-bold text-white flex items-center">
@@ -95,18 +81,7 @@
                 </div>
                 <div class="p-3 space-y-3 max-h-96 overflow-y-auto">
                     @forelse ($upcomingTasks as $task)
-                        @include('partials.task-item', [
-                            'title' => $task->title,
-                            'subject' => $task->subject->name,
-                            'subjectColor' => $task->subject->color ?? '#6b7280',
-                            'dueTime' => $task->due_date->isTomorrow()
-                                ? 'Tomorrow'
-                                : $task->due_date->format('M j'),
-                            'priority' => $task->priority,
-                            'xpEarned' => $task->xp_earned,
-                            'isOverdue' => false,
-                            'taskId' => $task->id,
-                        ])
+                        @livewire('dashboard.task-item', ['task' => $task], key($task->id))
                     @empty
                         <p class="text-sm text-gray-400">No upcoming tasks. You're ahead of the game! 🧠</p>
                     @endforelse
