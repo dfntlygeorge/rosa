@@ -13,7 +13,7 @@ Route::get('/', function () {
 })->name('home');
 
 // dashboard
-Route::get('/dashboard', TaskDashboard::class)->name('dashboard');
+Route::get('/dashboard', TaskDashboard::class)->middleware(['auth'])->name('dashboard');
 
 // students
 Route::middleware(['auth'])->group(function () {

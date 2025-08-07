@@ -46,6 +46,7 @@
                             'dueTime' => $task->due_date->diffForHumans(['parts' => 2, 'short' => true]), // e.g., "in 4h"
                             'priority' => $task->priority,
                             'xpEarned' => $task->xp_earned,
+                            'taskId' => $task->id,
                         ])
                     @empty
                         <p class="text-purple-200 text-sm">No tasks due today! 🎉</p>
@@ -73,6 +74,7 @@
                             'priority' => $task->priority,
                             'xpEarned' => $task->xp_earned,
                             'isOverdue' => true,
+                            'taskId' => $task->id,
                         ])
                     @empty
                         <p class="text-sm text-red-300">You're all caught up! 🎉</p>
@@ -103,6 +105,7 @@
                             'priority' => $task->priority,
                             'xpEarned' => $task->xp_earned,
                             'isOverdue' => false,
+                            'taskId' => $task->id,
                         ])
                     @empty
                         <p class="text-sm text-gray-400">No upcoming tasks. You're ahead of the game! 🧠</p>
@@ -119,4 +122,7 @@
 
     <!-- Create Task Modal Component -->
     <livewire:dashboard.add-task-modal />
+
+    <!-- Edit Task Modal Component -->
+    <livewire:dashboard.edit-task-modal />
 </div>
