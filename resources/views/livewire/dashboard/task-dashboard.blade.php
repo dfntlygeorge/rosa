@@ -110,11 +110,13 @@
                 </div>
             </div>
 
-
         </div>
 
         <!-- Compact Add Task Button -->
         @include('partials.add-task-button')
 
     </div>
+
+    <!-- Create Task Modal Component -->
+    <livewire:dashboard.add-task-modal />
 </div>
