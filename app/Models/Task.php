@@ -19,6 +19,7 @@ class Task extends Model
         "priority",
         "is_done",
         "completed_at",
+        'is_deleted',
         "xp_earned",
     ];
 

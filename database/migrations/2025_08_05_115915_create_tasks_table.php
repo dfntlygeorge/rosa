@@ -27,6 +27,7 @@ return new class extends Migration
             $table->timestamp('completed_at')->nullable();
 
             $table->unsignedInteger('xp_earned')->default(0);
+            $table->boolean('is_deleted')->default(false);
 
             $table->timestamps();
         });
